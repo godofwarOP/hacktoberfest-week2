@@ -11,9 +11,12 @@ import { ClientInterface } from "../interfaces/ClientInterface";
 export class CommandLoader {
   private globalCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
     [];
-  public constructor(private commandsPath: string) {}
+  public constructor(
+    public client: ClientInterface,
+    private commandsPath: string
+  ) {}
 
-  public async load(client: ClientInterface) {
+  public async load() {
     const subFolders = readdirSync(resolve("dist", this.commandsPath));
 
     if (!subFolders) throw new Error("No commands folder found!");
@@ -35,7 +38,7 @@ export class CommandLoader {
 
         const object = new importedClass() as CommandInterface;
 
-        client.commands.set(object.name, object);
+        this.client.commands.set(object.name, object);
 
         this.globalCommands.push(object.data.toJSON());
       }

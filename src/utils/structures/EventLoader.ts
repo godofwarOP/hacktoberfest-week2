@@ -5,9 +5,12 @@ import { EventInterface } from "../interfaces/EventInterface";
 import { ClientInterface } from "../interfaces/ClientInterface";
 
 export class EventLoader {
-  public constructor(private eventsPath: string) {}
+  public constructor(
+    public client: ClientInterface,
+    private eventsPath: string
+  ) {}
 
-  public async load(client: ClientInterface) {
+  public async load() {
     readdir(this.eventsPath, async (err, files) => {
       const filteredEventFiles = files.filter((e) => e.endsWith(".js"));
       for (const file of filteredEventFiles) {
@@ -15,8 +18,8 @@ export class EventLoader {
         const importedFile = await import(filePath);
         const eventClass = importedFile[parse(filePath).name];
         const eventClassObject = new eventClass() as EventInterface;
-        client.on(eventClassObject.name, (...args) =>
-          eventClassObject.execute(client, ...args)
+        this.client.on(eventClassObject.name, (...args) =>
+          eventClassObject.execute(this.client, ...args)
         );
       }
     });

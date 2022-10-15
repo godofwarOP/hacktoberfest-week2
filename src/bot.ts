@@ -1,4 +1,4 @@
-import { Instance as Kana } from "./utils/structures/Kana";
+import { Kana } from "./utils/structures/Kana";
 
-const kana = Kana;
+const kana = new Kana();
 kana.start(process.env.BOT_TOKEN!);

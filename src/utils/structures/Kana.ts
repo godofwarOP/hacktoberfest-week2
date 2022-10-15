@@ -4,31 +4,22 @@ import { CommandInterface } from "../interfaces/CommandInterface";
 import { CommandLoader } from "./CommandLoader";
 import { EventLoader } from "./EventLoader";
 
-class Kana extends Client {
-  public readonly eventLoader = new EventLoader(resolve("dist", "events"));
-  public readonly commandLoader = new CommandLoader("commands");
+export class Kana extends Client {
+  public readonly events = new EventLoader(this, resolve("dist", "events"));
+  public readonly commandLoader = new CommandLoader(this, "commands");
   public static instance: Kana;
-  public commands;
+  public commands: Collection<string, CommandInterface>;
 
-  private constructor() {
+  public constructor() {
     super({
       intents: ["GuildMessages"],
     });
     this.commands = new Collection<string, CommandInterface>();
   }
 
-  public static getInstance(): Kana {
-    if (!this.instance) {
-      this.instance = new Kana();
-    }
-    return this.instance;
-  }
-
   public async start(token: string) {
-    await this.commandLoader.load(this);
-    await this.eventLoader.load(this);
+    await this.commandLoader.load();
+    await this.events.load();
     this.login(token);
   }
 }
-
-export const Instance = Kana.getInstance();
