@@ -2,14 +2,13 @@ import {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
   bold,
-  PermissionFlagsBits,
   ToAPIApplicationCommandOptions,
   codeBlock,
   APIApplicationCommandOption,
 } from "discord.js";
-import { createEmbed } from "../../utils/functions/createEmbed";
-import { ClientInterface } from "../../utils/interfaces/ClientInterface";
-import { CommandInterface } from "../../utils/interfaces/CommandInterface";
+import { createEmbed } from "../../utils/functions/createEmbed.js";
+import { ClientInterface } from "../../utils/interfaces/ClientInterface.js";
+import { CommandInterface } from "../../utils/interfaces/CommandInterface.js";
 
 export class Help implements CommandInterface {
   name: string = "help";
@@ -54,7 +53,7 @@ export class Help implements CommandInterface {
         return;
       }
       embed.setTitle(
-        `Extra Information About ${this.PascalCase(
+        `Extra Information About ${client.utils.convertToPascalCase(
           optionInCollection.name
         )} Command`
       );
@@ -73,7 +72,11 @@ export class Help implements CommandInterface {
         },
         {
           name: "Category",
-          value: bold(`\`${this.PascalCase(optionInCollection.category)}\``),
+          value: bold(
+            `\`${client.utils.convertToPascalCase(
+              optionInCollection.category
+            )}\``
+          ),
         },
         {
           name: "Extra Options",
@@ -104,7 +107,7 @@ export class Help implements CommandInterface {
 
     commandsMap.forEach((value, key) => {
       embed.addFields({
-        name: this.PascalCase(key),
+        name: client.utils.convertToPascalCase(key),
         value: bold(codeBlock(value.join(", "))),
       });
     });
@@ -112,10 +115,6 @@ export class Help implements CommandInterface {
     interaction.reply({
       embeds: [embed],
     });
-  }
-
-  PascalCase(word: string) {
-    return word[0].toUpperCase() + word.slice(1, word.length);
   }
 
   resolveOptions(options: ToAPIApplicationCommandOptions[]) {
