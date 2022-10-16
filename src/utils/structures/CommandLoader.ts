@@ -45,18 +45,30 @@ export class CommandLoader {
     }
 
     const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN!);
-    rest
-      .put(
-        Routes.applicationGuildCommands(
-          "860507365275074570",
-          "985799144163672064"
-        ),
-        {
+    if (process.env.NODE_ENV === "development") {
+      console.log("Running in Development mode");
+      rest
+        .put(
+          Routes.applicationGuildCommands(
+            this.client.config.applicationId,
+            this.client.config.guildId
+          ),
+          {
+            body: this.globalCommands,
+          }
+        )
+        .then(() => {
+          console.log("Successfully registered guild commands");
+        });
+    } else {
+      console.log("Running in Production mode");
+      rest
+        .put(Routes.applicationCommands(this.client.user?.id!), {
           body: this.globalCommands,
-        }
-      )
-      .then(() => {
-        console.log("Successfully registered commands");
-      });
+        })
+        .then(() => {
+          console.log("Successfully registered global commands");
+        });
+    }
   }
 }
