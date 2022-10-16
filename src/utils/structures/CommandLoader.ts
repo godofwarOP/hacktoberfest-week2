@@ -63,7 +63,7 @@ export class CommandLoader {
     } else {
       console.log("Running in Production mode");
       rest
-        .put(Routes.applicationCommands(this.client.user?.id!), {
+        .put(Routes.applicationCommands(this.client.config.applicationId), {
           body: this.globalCommands,
         })
         .then(() => {
