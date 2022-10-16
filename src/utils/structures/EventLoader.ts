@@ -1,8 +1,8 @@
 import { Client } from "discord.js";
 import { resolve, parse } from "node:path";
 import { readdir } from "node:fs";
-import { EventInterface } from "../interfaces/EventInterface";
-import { ClientInterface } from "../interfaces/ClientInterface";
+import { EventInterface } from "../interfaces/EventInterface.js";
+import { ClientInterface } from "../interfaces/ClientInterface.js";
 
 export class EventLoader {
   public constructor(

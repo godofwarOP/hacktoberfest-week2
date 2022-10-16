@@ -1,5 +1,5 @@
 import { ActivityType, Client } from "discord.js";
-import { EventInterface } from "../utils/interfaces/EventInterface";
+import { EventInterface } from "../utils/interfaces/EventInterface.js";
 
 export class Ready implements EventInterface {
   public name = "ready";

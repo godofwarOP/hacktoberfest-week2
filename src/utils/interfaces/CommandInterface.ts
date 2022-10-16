@@ -4,7 +4,7 @@ import {
   Interaction,
   SlashCommandBuilder,
 } from "discord.js";
-import { ClientInterface } from "./ClientInterface";
+import { ClientInterface } from "./ClientInterface.js";
 
 export interface CommandInterface {
   name: string;

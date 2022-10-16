@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, Client, Interaction } from "discord.js";
-import { ClientInterface } from "../utils/interfaces/ClientInterface";
-import { EventInterface } from "../utils/interfaces/EventInterface";
-import { Kana } from "../utils/structures/Kana";
+import { ClientInterface } from "../utils/interfaces/ClientInterface.js";
+import { EventInterface } from "../utils/interfaces/EventInterface.js";
 
 export class InteractionCreate implements EventInterface {
   public name: string = "interactionCreate";
@@ -24,12 +23,21 @@ export class InteractionCreate implements EventInterface {
     try {
       await command.execute(interaction, client);
     } catch (error) {
-      interaction.reply({
-        ephemeral: true,
-        isMessage: true,
-        content:
-          "There was an error while executing this command. Please try again later!",
-      });
+      console.log(error);
+      if (error instanceof Error) {
+        interaction.reply({
+          ephemeral: true,
+          isMessage: true,
+          content: `🛑 ${error.message}`,
+        });
+      } else {
+        interaction.reply({
+          ephemeral: true,
+          isMessage: true,
+          content:
+            "🛑 There was an error while executing this command. Please try again later!",
+        });
+      }
     }
   }
 }

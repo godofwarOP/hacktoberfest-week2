@@ -1,4 +1,4 @@
-import { Kana } from "./utils/structures/Kana";
+import { Kana } from "./utils/structures/Kana.js";
 
 const kana = new Kana();
-kana.start(process.env.BOT_TOKEN!);
+kana.start();

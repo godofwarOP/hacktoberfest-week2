@@ -5,8 +5,8 @@ import {
 } from "discord.js";
 import { readdirSync } from "node:fs";
 import { resolve, parse } from "node:path";
-import { CommandInterface } from "../interfaces/CommandInterface";
-import { ClientInterface } from "../interfaces/ClientInterface";
+import { CommandInterface } from "../interfaces/CommandInterface.js";
+import { ClientInterface } from "../interfaces/ClientInterface.js";
 
 export class CommandLoader {
   private globalCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
