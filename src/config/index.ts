@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { ClientInterface } from "../utils/interfaces/ClientInterface";
 
 export class Config {
   fetch = fetch;
@@ -7,11 +8,9 @@ export class Config {
   public guildId: string = "";
   public applicationId: string = "";
 
-  public constructor() {
-    this.init();
-  }
+  public constructor() {}
 
-  loadEnvVariables() {
+  private loadEnvVariables() {
     if (!process.env.BOT_TOKEN)
       throw new Error(
         "Bot token is missing, did you forget to set it as env variable?"
@@ -39,7 +38,8 @@ export class Config {
     this.applicationId = process.env.APPLICATION_ID;
   }
 
-  init() {
+  public init(client: ClientInterface) {
+    client.logger.log("info", "Loading ENV Variables");
     this.loadEnvVariables();
   }
 }

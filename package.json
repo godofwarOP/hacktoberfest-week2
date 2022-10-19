@@ -13,7 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.6.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",

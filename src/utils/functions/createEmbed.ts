@@ -34,13 +34,3 @@ export function createEmbed(data: {
 
   return embed;
 }
-// author: EmbedAuthorData | null,
-//   title: string | null,
-//   description: string | null,
-//   url: string | null,
-//   color: number | RGBTuple | null,
-//   fields: EmbedField[] | null,
-//   image: EmbedImageData | null,
-//   thumbnail: EmbedImageData | null,
-//   footer: EmbedFooterData | null,
-//   timestamp: boolean

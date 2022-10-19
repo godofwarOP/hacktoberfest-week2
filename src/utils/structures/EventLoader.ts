@@ -11,9 +11,19 @@ export class EventLoader {
   ) {}
 
   public async load() {
+    this.client.logger.log("info", "Loading events");
     readdir(this.eventsPath, async (err, files) => {
       const filteredEventFiles = files.filter((e) => e.endsWith(".js"));
+
+      if (!filteredEventFiles) throw new Error("No event files found!");
+
+      this.client.logger.log(
+        "info",
+        `Found ${filteredEventFiles.length} event files`
+      );
+
       for (const file of filteredEventFiles) {
+        this.client.logger.log("info", `Reading ${file} file`);
         const filePath = resolve(this.eventsPath, file);
         const importedFile = await import(filePath);
         const eventClass = importedFile[parse(filePath).name];
@@ -21,6 +31,7 @@ export class EventLoader {
         this.client.on(eventClassObject.name, (...args) =>
           eventClassObject.execute(this.client, ...args)
         );
+        this.client.logger.log("info", `Successfully imported ${file} event`);
       }
     });
   }

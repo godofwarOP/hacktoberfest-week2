@@ -37,7 +37,7 @@ export class About implements CommandInterface {
       )}`,
       timestamp: true,
     });
-    interaction.reply({
+    interaction.editReply({
       embeds: [embed],
     });
   }

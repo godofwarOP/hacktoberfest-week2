@@ -117,7 +117,7 @@ export class Search implements CommandInterface {
         });
       });
 
-      interaction.reply({
+      interaction.editReply({
         content: "Here is your data",
         embeds: [embed],
       });
@@ -252,8 +252,6 @@ export class Search implements CommandInterface {
 
       return json;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

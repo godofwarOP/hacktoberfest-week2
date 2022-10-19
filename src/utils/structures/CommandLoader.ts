@@ -17,17 +17,24 @@ export class CommandLoader {
   ) {}
 
   public async load() {
+    this.client.logger.log("info", "Loading commands");
     const subFolders = readdirSync(resolve("dist", this.commandsPath));
 
     if (!subFolders) throw new Error("No commands folder found!");
 
+    this.client.logger.log("info", `Found ${subFolders.length} subfolders`);
     for (const folder of subFolders) {
+      this.client.logger.log("info", `Reading ${folder} folder`);
       const files = readdirSync(
         resolve("dist", this.commandsPath, folder)
       ).filter((file) => file.endsWith(".js"));
 
       if (!files) throw new Error("No files found!");
 
+      this.client.logger.log(
+        "info",
+        `Found ${files.length} files inside ${folder} folder`
+      );
       for (const file of files) {
         const importedFile = await import(
           resolve("dist", "commands", folder, file)
@@ -38,6 +45,7 @@ export class CommandLoader {
 
         const object = new importedClass() as CommandInterface;
 
+        this.client.logger.log("info", `loaded ${object.name} command`);
         this.client.commands.set(object.name, object);
 
         this.globalCommands.push(object.data.toJSON());
@@ -46,7 +54,7 @@ export class CommandLoader {
 
     const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN!);
     if (process.env.NODE_ENV === "development") {
-      console.log("Running in Development mode");
+      this.client.logger.log("info", "Registering command as guild commands");
       rest
         .put(
           Routes.applicationGuildCommands(
@@ -58,16 +66,29 @@ export class CommandLoader {
           }
         )
         .then(() => {
-          console.log("Successfully registered guild commands");
+          this.client.logger.log(
+            "info",
+            "Successfully registed guild commands"
+          );
+        })
+        .catch((error) => {
+          throw error;
         });
     } else {
-      console.log("Running in Production mode");
+      this.client.logger.log("info", "Registering command as global commands");
+
       rest
         .put(Routes.applicationCommands(this.client.config.applicationId), {
           body: this.globalCommands,
         })
         .then(() => {
-          console.log("Successfully registered global commands");
+          this.client.logger.log(
+            "info",
+            "Successfully registed global commands"
+          );
+        })
+        .catch((error) => {
+          throw error;
         });
     }
   }

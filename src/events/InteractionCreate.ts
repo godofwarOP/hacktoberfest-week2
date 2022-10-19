@@ -21,19 +21,22 @@ export class InteractionCreate implements EventInterface {
     }
 
     try {
+      client.logger.log(
+        "info",
+        `${interaction.user.username}(${interaction.user.id}) ran ${interaction.commandName} in (${interaction.guild?.id}) guild`
+      );
+
+      await interaction.deferReply();
+
       await command.execute(interaction, client);
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
-        interaction.reply({
-          ephemeral: true,
-          isMessage: true,
+        client.logger.log("error", error.message);
+        interaction.editReply({
           content: `🛑 ${error.message}`,
         });
       } else {
-        interaction.reply({
-          ephemeral: true,
-          isMessage: true,
+        interaction.editReply({
           content:
             "🛑 There was an error while executing this command. Please try again later!",
         });

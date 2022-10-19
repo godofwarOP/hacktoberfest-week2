@@ -88,7 +88,7 @@ export class Help implements CommandInterface {
         },
       ]);
 
-      interaction.reply({
+      interaction.editReply({
         embeds: [embed],
       });
       return;
@@ -112,7 +112,7 @@ export class Help implements CommandInterface {
       });
     });
 
-    interaction.reply({
+    interaction.editReply({
       embeds: [embed],
     });
   }
