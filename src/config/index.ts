@@ -7,8 +7,9 @@ export class Config {
   public trackerggApiKey: string = "";
   public guildId: string = "";
   public applicationId: string = "";
+  public logsChannelId: string | null = null;
 
-  public constructor() {}
+  public constructor(private client: ClientInterface) {}
 
   private loadEnvVariables() {
     if (!process.env.BOT_TOKEN)
@@ -33,13 +34,22 @@ export class Config {
       this.guildId = process.env.GUILD_ID;
     }
 
+    if (process.env.LOGS_CHANNEL_ID) {
+      this.logsChannelId = process.env.LOGS_CHANNEL_ID;
+    } else {
+      this.client.logger.log(
+        "warn",
+        `Logs Channel Id not Found, Disabling Guild Join and Leave Logging`
+      );
+    }
+
     this.token = process.env.BOT_TOKEN;
     this.trackerggApiKey = process.env.TRACKERGG_API_KEY;
     this.applicationId = process.env.APPLICATION_ID;
   }
 
-  public init(client: ClientInterface) {
-    client.logger.log("info", "Loading ENV Variables");
+  public init() {
+    this.client.logger.log("info", "Loading ENV Variables");
     this.loadEnvVariables();
   }
 }

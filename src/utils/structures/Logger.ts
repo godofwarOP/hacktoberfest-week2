@@ -7,19 +7,18 @@ enum LoggingLevels {
 }
 
 export class CustomLogger {
-  winston: Logger | null = null;
+  private winston: Logger | null = null;
   constructor(private folderPath: string) {
     this.createLogger();
   }
 
+  public terminateLogger() {
+    this.winston?.end();
+  }
+
   private createLogger() {
     this.winston = createLogger({
-      level: "info",
-      format: format.combine(
-        format.timestamp(),
-        format.prettyPrint(),
-        format.simple()
-      ),
+      format: format.combine(format.timestamp(), format.json()),
       transports: [
         new transports.File({
           level: "info",
@@ -30,19 +29,33 @@ export class CustomLogger {
           filename: this.folderPath + "/error.log",
         }),
         new transports.Console({
-          format: format.simple(),
+          format: format.combine(format.colorize(), format.simple()),
         }),
       ],
     });
   }
 
-  public log(level: keyof typeof LoggingLevels, message: string) {
-    this.winston![level](`${level.toUpperCase()}::${message}`);
+  public log(
+    level: keyof typeof LoggingLevels,
+    message: string,
+    error?: Error
+  ) {
+    if (level === "error") {
+      this.logError(error!);
+      return;
+    }
+
+    this.winston![level](message);
+  }
+
+  private logError(error: Error) {
+    this.winston?.error(`${error.message} \n stack: ${error.stack}`);
   }
 
   private test() {
     this.log("warn", "Warning::method embed.setColor is deprecated!");
-    this.log("error", "Error::method embed.setColor is undefined");
+    const error = new Error("HELLO");
+    this.log("error", "", error);
     this.log("info", "Info::Kana joined a new server with 69 memebers!");
   }
 }

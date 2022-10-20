@@ -1,4 +1,3 @@
-import { Client } from "discord.js";
 import { resolve, parse } from "node:path";
 import { readdir } from "node:fs";
 import { EventInterface } from "../interfaces/EventInterface.js";
@@ -25,10 +24,14 @@ export class EventLoader {
       for (const file of filteredEventFiles) {
         this.client.logger.log("info", `Reading ${file} file`);
         const filePath = resolve(this.eventsPath, file);
+
         const importedFile = await import(filePath);
+
         const eventClass = importedFile[parse(filePath).name];
+
         const eventClassObject = new eventClass() as EventInterface;
-        this.client.on(eventClassObject.name, (...args) =>
+
+        this.client.on(eventClassObject.name as string, (...args) =>
           eventClassObject.execute(this.client, ...args)
         );
         this.client.logger.log("info", `Successfully imported ${file} event`);

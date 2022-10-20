@@ -1,4 +1,6 @@
+import { Events } from "discord.js";
+
 export interface EventInterface {
-  name: string;
+  name: Events;
   execute: (...args: any) => any;
 }
