@@ -25,7 +25,7 @@ export class GuildCreate implements EventInterface {
         }
 
         mainGuildObject.channels
-          .fetch(client.config.logsChannelId, { cache: true, force: true })
+          .fetch(client.config.logsChannelId, { cache: true })
           .then((channel) => {
             const embed = createEmbed({
               color: "Green",
