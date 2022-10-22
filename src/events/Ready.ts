@@ -23,9 +23,7 @@ export class Ready implements EventInterface {
   ) {
     try {
       if (client.config.logsChannelId) {
-        const mainGuild = client.guilds.cache.find(
-          (e) => e.id === client.config.guildId
-        );
+        const mainGuild = await client.guilds.fetch(client.config.guildId);
         if (!mainGuild) {
           throw new Error("Main Guild not found");
         }

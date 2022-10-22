@@ -26,13 +26,10 @@ export class Config {
         "Application Id is missing, did you forget to set it as env variable?"
       );
 
-    if (process.env.NODE_ENV === "development") {
-      if (!process.env.GUILD_ID)
-        throw new Error(
-          "Guild Id is missing, did you forget to set it as env variable?"
-        );
-      this.guildId = process.env.GUILD_ID;
-    }
+    if (!process.env.GUILD_ID)
+      throw new Error(
+        "Guild Id is missing, did you forget to set it as env variable?"
+      );
 
     if (process.env.LOGS_CHANNEL_ID) {
       this.logsChannelId = process.env.LOGS_CHANNEL_ID;
@@ -46,6 +43,7 @@ export class Config {
     this.token = process.env.BOT_TOKEN;
     this.trackerggApiKey = process.env.TRACKERGG_API_KEY;
     this.applicationId = process.env.APPLICATION_ID;
+    this.guildId = process.env.GUILD_ID;
   }
 
   public init() {
