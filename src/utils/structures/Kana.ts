@@ -2,7 +2,7 @@ import { Client, Collection } from "discord.js";
 import { resolve } from "node:path";
 import { CustomLogger } from "./Logger.js";
 import { Config } from "../../config/index.js";
-import { Utils } from "../functions/index.js";
+import { Utils } from "./Utils.js";
 import { CommandInterface } from "../interfaces/CommandInterface.js";
 import { CommandLoader } from "./CommandLoader.js";
 import { EventLoader } from "./EventLoader.js";
