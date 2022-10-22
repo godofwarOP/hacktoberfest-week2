@@ -1,4 +1,4 @@
-export type SearchApexLegendResponse = {
+type searchApexLegendResponse = {
   data: {
     platformInfo: {
       platformSlug: string;
@@ -62,4 +62,31 @@ type Stats = {
   value: number;
   displayValue: string;
   displayType: string;
+};
+
+type searchCsgoSearchResponse = {
+  data: {
+    platformInfo: {
+      platformSlug: string;
+      platformUserId: string;
+      platformUserHandle: string;
+      platformUserIdentifier: string;
+      avatarUrl: string;
+    };
+    userInfo: {
+      userId: number | null;
+      isPremium: boolean;
+      isVerified: boolean;
+      isInfluencer: boolean;
+      isPartner: boolean;
+      countryCode: string | null;
+      customAvatarUrl: string | null;
+      customHeroUrl: string | null;
+      socialAccounts: [];
+      pageviews: number;
+      isSuspicious: boolean | null;
+    };
+
+    segments: Segment[];
+  };
 };

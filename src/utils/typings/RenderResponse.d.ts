@@ -58,3 +58,21 @@ type ApexSegmentsData = {
     };
   }[];
 };
+
+type CsgoMainData = {
+  platform: {
+    name: string;
+    userId: string;
+    userHandle: string;
+    avatarUrl: string;
+  };
+  segments: CsgoSegments[];
+};
+
+type CsgoSegments = {
+  type: string;
+  stats: {
+    name: string;
+    value: string;
+  }[];
+};
