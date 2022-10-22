@@ -40,25 +40,4 @@ export class Kana extends Client {
       }
     }
   }
-
-  public async sendAcknowledgementMessage(message: string) {
-    try {
-      if (this.config.logsChannelId) {
-        const mainGuild = this.guilds.cache.find(
-          (e) => e.id === this.config.guildId
-        );
-        if (!mainGuild) {
-          throw new Error("Main Guild not found");
-        }
-        const logChannel = (await mainGuild.channels.fetch(
-          this.config.logsChannelId,
-          { cache: true }
-        )) as TextChannel;
-        this.logger.log("info", "Sending an acknowledgement message");
-        logChannel.send(message);
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
 }

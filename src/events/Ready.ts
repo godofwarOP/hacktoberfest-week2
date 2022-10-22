@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events } from "discord.js";
+import { ActivityType, Client, Events, TextChannel } from "discord.js";
 import { ClientInterface } from "../utils/interfaces/ClientInterface.js";
 import { EventInterface } from "../utils/interfaces/EventInterface.js";
 
@@ -14,6 +14,30 @@ export class Ready implements EventInterface {
         },
       ],
     });
-    client.sendAcknowledgementMessage("✅ Bot is now online!");
+    this.sendAcknowledgementMessage(client, "✅ Bot is now online!");
+  }
+
+  private async sendAcknowledgementMessage(
+    client: ClientInterface,
+    message: string
+  ) {
+    try {
+      if (client.config.logsChannelId) {
+        const mainGuild = client.guilds.cache.find(
+          (e) => e.id === client.config.guildId
+        );
+        if (!mainGuild) {
+          throw new Error("Main Guild not found");
+        }
+        const logChannel = (await mainGuild.channels.fetch(
+          client.config.logsChannelId,
+          { cache: true }
+        )) as TextChannel;
+        client.logger.log("info", "Sending an acknowledgement message");
+        logChannel.send(message);
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }
