@@ -16,7 +16,7 @@ export class CommandLoader {
     private commandsPath: string
   ) {}
 
-  public async load() {
+  public load() {
     this.client.logger.log("info", "Loading commands");
     const subFolders = readdirSync(resolve("dist", this.commandsPath));
 
@@ -36,19 +36,21 @@ export class CommandLoader {
         `Found ${files.length} files inside ${folder} folder`
       );
       for (const file of files) {
-        const importedFile = await import(
-          resolve("dist", "commands", folder, file)
+        import(resolve("dist", "commands", folder, file)).then(
+          (importedFile) => {
+            const importedClass =
+              importedFile[
+                parse(resolve("dist", "commands", folder, file)).name
+              ];
+
+            const object = new importedClass() as CommandInterface;
+
+            this.client.logger.log("info", `loaded ${object.name} command`);
+            this.client.commands.set(object.name, object);
+
+            this.globalCommands.push(object.data.toJSON());
+          }
         );
-
-        const importedClass =
-          importedFile[parse(resolve("dist", "commands", folder, file)).name];
-
-        const object = new importedClass() as CommandInterface;
-
-        this.client.logger.log("info", `loaded ${object.name} command`);
-        this.client.commands.set(object.name, object);
-
-        this.globalCommands.push(object.data.toJSON());
       }
     }
 

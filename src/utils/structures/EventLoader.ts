@@ -1,5 +1,5 @@
 import { resolve, parse } from "node:path";
-import { readdir } from "node:fs";
+import { readdirSync } from "node:fs";
 import { EventInterface } from "../interfaces/EventInterface.js";
 import { ClientInterface } from "../interfaces/ClientInterface.js";
 
@@ -11,23 +11,19 @@ export class EventLoader {
 
   public async load() {
     this.client.logger.log("info", "Loading events");
-    readdir(this.eventsPath, async (err, files) => {
-      const filteredEventFiles = files.filter((e) => e.endsWith(".js"));
 
-      if (!filteredEventFiles) throw new Error("No event files found!");
+    const files = readdirSync(this.eventsPath).filter((e) => e.endsWith(".js"));
 
-      this.client.logger.log(
-        "info",
-        `Found ${filteredEventFiles.length} event files`
-      );
+    if (files.length === 0) throw new Error("No event files found");
 
-      for (const file of filteredEventFiles) {
-        this.client.logger.log("info", `Reading ${file} file`);
-        const filePath = resolve(this.eventsPath, file);
+    this.client.logger.log("info", `Found ${files.length} event files`);
 
-        const importedFile = await import(filePath);
+    for (const file of files) {
+      this.client.logger.log("info", `Reading ${file} file`);
+      const filePath = resolve(this.eventsPath, file);
 
-        const eventClass = importedFile[parse(filePath).name];
+      import(filePath).then((data) => {
+        const eventClass = data[parse(filePath).name];
 
         const eventClassObject = new eventClass() as EventInterface;
 
@@ -35,7 +31,7 @@ export class EventLoader {
           eventClassObject.execute(this.client, ...args)
         );
         this.client.logger.log("info", `Successfully imported ${file} event`);
-      }
-    });
+      });
+    }
   }
 }
