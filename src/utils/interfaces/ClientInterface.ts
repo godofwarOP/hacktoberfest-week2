@@ -9,6 +9,7 @@ type commands = {
   config: Config;
   commands: Collection<string, CommandInterface>;
   logger: CustomLogger;
+  sendAcknowledgementMessage: (message: string) => void;
 };
 
 export interface ClientInterface extends Client, commands {}

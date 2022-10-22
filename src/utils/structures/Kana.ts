@@ -33,9 +33,7 @@ export class Kana extends Client {
       this.config.init();
       this.events.load();
       this.commandLoader.load();
-      this.login(this.config.token).then(() => {
-        this.sendAcknowledgementMessage("✅ Bot is now online!");
-      });
+      this.login(this.config.token);
     } catch (error) {
       if (error instanceof Error) {
         this.logger.log("error", "", error);
@@ -56,6 +54,7 @@ export class Kana extends Client {
           this.config.logsChannelId,
           { cache: true }
         )) as TextChannel;
+        this.logger.log("info", "Sending an acknowledgement message");
         logChannel.send(message);
       }
     } catch (error) {

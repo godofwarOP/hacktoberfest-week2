@@ -14,5 +14,6 @@ export class Ready implements EventInterface {
         },
       ],
     });
+    client.sendAcknowledgementMessage("✅ Bot is now online!");
   }
 }
