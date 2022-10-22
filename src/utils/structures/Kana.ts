@@ -33,8 +33,9 @@ export class Kana extends Client {
       this.config.init();
       this.events.load();
       this.commandLoader.load();
-      await this.login(this.config.token);
-      this.sendAcknowledgementMessage("✅ Bot is now online!");
+      this.login(this.config.token).then(() => {
+        this.sendAcknowledgementMessage("✅ Bot is now online!");
+      });
     } catch (error) {
       if (error instanceof Error) {
         this.logger.log("error", "", error);
